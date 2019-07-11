@@ -1,0 +1,29 @@
+.btn-group {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+
+    .btn:not(:last-child) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .btn:not(:first-child) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .btn {
+        position: relative;
+        flex: 1 1 auto;
+        cursor: pointer;
+
+        &:hover,
+        &.active {
+            background-color: #5a6268;
+            border-color: #545b62;
+            color: #ffffff;
+        }
+    }
+}
+
