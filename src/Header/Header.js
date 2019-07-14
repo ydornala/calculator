@@ -10,11 +10,11 @@ export default class Header extends React.Component {
         super(props);
 
         this.state = { active: false };
-        console.log('header props', props);
     }
 
     toggle() {
         this.setState({ active: !this.state.active });
+        this.props.toggleMode();
     }
 
     render() {

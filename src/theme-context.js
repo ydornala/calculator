@@ -4,7 +4,7 @@ export const themes = {
     light: {
         background: '#FFFFFF',
         btnColor: '#F0F0F0',
-        color: '#00000'
+        color: '#000000'
     },
     dark: {
         background: '#000000',

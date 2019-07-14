@@ -1,6 +1,10 @@
 import React from 'react';
 
 import Digit from '../Digit';
+import Operations from '../Operations';
+import ScientificMode from '../ScientificMode';
+
+import { ThemeContext } from '../theme-context';
 
 export default class Calculator extends React.Component {
 
@@ -8,9 +12,21 @@ export default class Calculator extends React.Component {
         super(props);
         this.state = { inField: '', operationClicked: false };
         this.numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-        console.log('Props calcualtor ==> ', this, this.state); 
         this.handleChange = this.handleChange.bind(this);
         this.handleDigit = this.handleDigit.bind(this);
+
+        this.Clear = this.Clear.bind(this);
+        this.Add = this.Add.bind(this);
+        this.Subtract = this.Subtract.bind(this);
+        this.Divide = this.Divide.bind(this);
+        this.Multiply = this.Multiply.bind(this);
+        this.Equal = this.Equal.bind(this);
+
+        this.toggleSign = this.toggleSign.bind(this);
+        this.square = this.square.bind(this);
+        this.squareRoot = this.squareRoot.bind(this);
+
+        console.log('toggle mode calc', this);
     }
 
     Add() {
@@ -34,7 +50,6 @@ export default class Calculator extends React.Component {
         const pr = Number(this.state.inField);
 
         var e;
-        console.log('Equal ==> ', this);
         
         switch (this.state.operation) {
             case 'a':
@@ -62,9 +77,6 @@ export default class Calculator extends React.Component {
 
     handleDigit(e) {
         var previousValue = this.state.inField;
-        console.log('pre', previousValue);
-        
-        console.log('handle Digit ==> ', this);
         
         if(this.state.operationClicked) {
             this.setState({inField: '', operationClicked: false, previousValue: previousValue});
@@ -77,7 +89,6 @@ export default class Calculator extends React.Component {
 
     handleChange(e) {
         this.setState({inField: e.target.value});
-        console.log('clicked', this);
     }
 
     square(e) {
@@ -87,8 +98,16 @@ export default class Calculator extends React.Component {
     }
 
     squareRoot(e) {
-        var n = Number(this.state.inField);
-        this.setState({inField: Math.sqrt(n)});
+        console.log('squart', this.state.inField, typeof this.state.inField);
+        var n = Number(this.state.inField);   
+
+        if(isNaN(Math.sqrt(n))) {
+            n = 'Not a Number';
+            alert(n);
+        } else {
+            n = Math.sqrt(n);
+        }
+        this.setState({inField: n});
     }
 
     toggleSign(e) {
@@ -98,25 +117,20 @@ export default class Calculator extends React.Component {
     }
 
     render() {
-        return (            
-            <div className="container-wrapper">
-                <input className="resultField" type="number" value={this.state.inField} onChange={this.handleChange} />
+        console.log('calc red', this.props);
+        return (
+            <ThemeContext.Consumer>
+                {theme => (
+                    <div className="container-wrapper">
+                        <input className="resultField" type="number" value={this.state.inField} onChange={this.handleChange} />
 
-                <Digit numbers={ this.numbers } handleDigit={this.handleDigit} {...this.props}/>
-                <div className="operations-wrapper">
-                    <button type="button" onClick={e => this.Clear(e)}>AC</button>
-                    <button type="button" onClick={e => this.Add(e)}>+</button>
-                    <button type="button" onClick={e => this.Multiply(e)}>*</button>
-                    <button type="button" onClick={e => this.Subtract(e)}>-</button>
-                    <button type="button" onClick={e => this.Divide(e)}>/</button>                                
-                    <button type="button" onClick={e => this.Equal(e)}>=</button>
-                </div>
-                <div className="scientific-mode">
-                    <button type="button" onClick={e => this.toggleSign(e)}>Sign</button>
-                    <button type="button" onClick={e => this.square(e)}>x<sup>2</sup></button>
-                    <button type="button" onClick={e => this.squareRoot(e)}><span>&#8730;</span>x</button>
-                </div>
-            </div>
+                        <Digit numbers={ this.numbers } handleDigit={this.handleDigit} {...this.props}/>
+                        <Operations Add={this.Add} Subtract={this.Subtract} Multiply={this.Multiply} Divide={this.Divide} Clear={this.Clear} Equal={this.Equal}/>
+                        {this.props.isModeActive && (<ScientificMode square={this.square} squareRoot={this.squareRoot} toggleSign={this.toggleSign} />)}
+                    </div>
+                )}
+
+            </ThemeContext.Consumer>
         );
     }
 }

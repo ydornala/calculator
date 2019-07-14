@@ -11,27 +11,30 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      theme: themes.light
-    }
+      theme: themes.light,
+      isActiveScientificMode: false
+    };
 
-    this.toggleTheme = this.toggleTheme.bind(this);    
+    this.toggleTheme = this.toggleTheme.bind(this);
+    this.toggleMode = this.toggleMode.bind(this);
   }
 
   toggleTheme() {
     this.setState({
       theme: this.state.theme === themes.dark ? themes.light : themes.dark
     });
+  }
 
-    console.log('theme', this.state.theme);
+  toggleMode() {
+    this.setState({isActiveScientificMode: !this.state.isActiveScientificMode});
   }
 
   render() {
-    let theme = this.context;
     return (
       <ThemeContext.Provider value={this.state.theme}>
         <div className="App" style={{backgroundColor: this.state.theme.background}}>
-          <Header changeTheme={this.toggleTheme}/>
-          <Calculator changeTheme={this.toggleTheme}/>
+          <Header changeTheme={this.toggleTheme} toggleMode={this.toggleMode}/>
+          <Calculator changeTheme={this.toggleTheme} isModeActive={this.state.isActiveScientificMode}/>
         </div>
       </ThemeContext.Provider>
     );
